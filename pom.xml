@@ -255,6 +255,45 @@
                             <warName>ROOT</warName>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>fabric8-maven-plugin</artifactId>
+                        <version>3.5.38</version>
+                        <executions>
+                          <execution>
+                            <goals>
+                              <goal>resource</goal>
+                              <goal>build</goal>
+                            </goals>
+                          </execution>
+                        </executions>
+                        <configuration>
+                            <mode>openshift</mode>
+                            <buildStrategy>s2i</buildStrategy>
+                            <verbose>true</verbose>
+                            <images>
+                                <image>
+                                    <alias>${project.artifactId}</alias>
+                                    <name>%g/%a:latest</name>
+                                    <build>
+                                        <from>wildflyext/wildfly-camel:6.0.0</from>
+                                        <maintainer>https://github.com/ppalaga</maintainer>
+                                        <assembly>
+                                            <name>target</name>
+                                            <descriptor>${basedir}/docker-assembly.xml</descriptor>
+                                        </assembly>
+                                    </build>
+                                </image>
+                            </images>
+                            <resources>
+                                <labels>
+                                    <all>
+                                        <space>wfc2</space>
+                                    </all>
+                                </labels>
+                            </resources>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
