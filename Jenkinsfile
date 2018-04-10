@@ -11,7 +11,7 @@ mavenNode {
   if (utils.isCI()){
 
     mavenCI{}
-    
+
   } else if (utils.isCD()){
     echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
     container(name: 'maven') {
@@ -25,31 +25,9 @@ mavenNode {
       }
 
       stage('Rollout to Stage'){
-        apply{
-          environment = envStage
-        }
-      }
-    }
-  }
-}
-
-if (utils.isCD()){
-  node {
-    stage('Approve'){
-       approve {
-         room = null
-         version = canaryVersion
-         environment = 'Stage'
-       }
-     }
-  }
-
-  clientsNode{
-    container(name: 'clients') {
-      stage('Rollout to Run'){
         unstash stashName
         apply{
-          environment = envProd
+          environment = envStage
         }
       }
     }
